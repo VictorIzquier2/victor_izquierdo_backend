@@ -112,8 +112,8 @@ authRoutes.post('/profile/newExperience', (req, res, next) => {
   const empresa = req.body.empresa;
   const ubicacion = req.body.ubicacion;
   const descripcion = req.body.ubicacion;
-
-  if(!cargo || !empleo || !empresa || ubicacion || descripcion) {
+  
+  if(!cargo || !empleo || !empresa || !ubicacion || !descripcion) {
     res
       .status(400)
       .json({message: 'Provide cargo, empleo, empresa, ubicacion & descripcion'});
