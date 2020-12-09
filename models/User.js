@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: {type: String, required: true},
   email: {type: String, required: true},
-  passport: {type: String, required: true, minlength: 8}
+  password: {type: String, required: true, minlength: 8},
+  experiences: [{type: Schema.ObjectId, ref: 'Experience'}]
 });
 
 const User = mongoose.model('User', userSchema);

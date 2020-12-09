@@ -22,7 +22,7 @@ const User = require('./models/User');
 
 // mongoose CONFIG
 mongoose
-  .connect('mongodb+srv://VictorIzquier2:1234@cluster0.5j2lv.mongodb.net/victor-izquierdo?retryWrites=true&w=majorityd', {
+  .connect('mongodb+srv://VictorIzquier2:1234@cluster0.5j2lv.mongodb.net/victor-izquierdo?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
     })
