@@ -24,7 +24,8 @@ router.post('/profile/addExperience', (req, res, next) => {
   const empleo = req.body.empleo;
   const empresa = req.body.empresa;
   const ubicacion = req.body.ubicacion;
-  const descripcion = req.body.ubicacion;
+  const descripcion = req.body.descripcion;
+  const owner = req.user._id;
   
   if(!cargo || !empleo || !empresa || !ubicacion || !descripcion) {
     res
@@ -38,21 +39,23 @@ router.post('/profile/addExperience', (req, res, next) => {
     empresa: empresa,
     ubicacion: ubicacion,
     descripcion: descripcion,
-    
+    owner: owner
   });
-
-  aNewExperience.save((err) => {
-    if(err){
-      console.log(err);
-      res
-        .status(400)
-        .json({message: 'Saving user to database went wrong.'}
-        );
-      return;
-    }
-    res
-      .status(200)
-      .json(aNewExperience);
-  })
+  User.updateOne({email: req.user.email}, {$push: {experiences: aNewExperience._id}})
+    .then(() => {
+      aNewExperience.save((err) => {
+        if(err){
+          console.log(err);
+          res
+            .status(400)
+            .json({message: 'Saving user to database went wrong.'}
+            );
+          return;
+        }
+        res
+          .status(200)
+          .json(aNewExperience);
+      })
+    })
 })
 module.exports = router;
