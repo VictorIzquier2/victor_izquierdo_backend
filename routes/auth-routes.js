@@ -6,7 +6,6 @@ const bcrypt     = require('bcryptjs');
 
 // MODELS
 const User = require('../models/User');
-const Experience = require('../models/Experience');
 
 authRoutes.post('/signup', (req, res, next) => {
   const username = req.body.username;
@@ -54,7 +53,6 @@ authRoutes.post('/signup', (req, res, next) => {
 
     aNewUser.save((err) => {
       if(err){
-        console.log(err);
         res
           .status(400)
           .json({message: 'Saving user to database went wrong.'}
@@ -103,44 +101,14 @@ authRoutes.post('/logout', (req, res, next) => {
     .json({message: 'Log out success!'});
 });
 
-authRoutes.get('/loggedin', (req, res) => req.isAuthenticated() ? res.status(200).json(req.user) : res.status(403).json({ message: 'Unauthorized' }));
-module.exports = authRoutes;
-
-authRoutes.post('/profile/newExperience', (req, res, next) => {
-  const cargo = req.body.cargo;
-  const empleo = req.body.empleo;
-  const empresa = req.body.empresa;
-  const ubicacion = req.body.ubicacion;
-  const descripcion = req.body.ubicacion;
-  
-  if(!cargo || !empleo || !empresa || !ubicacion || !descripcion) {
-    res
-      .status(400)
-      .json({message: 'Provide cargo, empleo, empresa, ubicacion & descripcion'});
-    return;
-  }
-
-
-  const aNewExperience = new Experience({
-    cargo: cargo,
-    empleo: empleo,
-    empresa: empresa,
-    ubicacion: ubicacion,
-    descripcion: descripcion,
-  });
-
-  aNewExperience.save((err) => {
-    if(err){
-      console.log(err);
-      res
-        .status(400)
-        .json({message: 'Saving user to database went wrong.'}
-        );
-      return;
-    }
+authRoutes.get('/loggedin', (req, res, next) => {
+  // req.isAuthenticated() is defined by passport
+  if(req.isAuthenticated()){
     res
       .status(200)
-      .json(aNewExperience);
-  })
-
-})
+      .json(req.user);
+  }
+  res
+    .json({});
+});
+module.exports = authRoutes;
