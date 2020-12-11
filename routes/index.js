@@ -2,6 +2,9 @@
 const express = require('express');
 const router  = express.Router();
 
+// include CLOUDINARY:
+const uploader = require('../configs/cloudinary-setup');
+
 // MODELS
 const User = require('../models/User');
 const Experience = require('../models/Experience')
@@ -25,12 +28,13 @@ router.post('/profile/addExperience', (req, res, next) => {
   const empresa = req.body.empresa;
   const ubicacion = req.body.ubicacion;
   const descripcion = req.body.descripcion;
+  const imageUrl = req.body.imageUrl;
   const owner = req.user._id;
   
-  if(!cargo || !empleo || !empresa || !ubicacion || !descripcion) {
+  if(!cargo || !empleo || !empresa || !ubicacion || !descripcion || !imageUrl) {
     res
       .status(400)
-      .json({message: 'Provide cargo, empleo, empresa, ubicacion & descripcion'});
+      .json({message: 'Provide cargo, empleo, empresa, ubicacion, descripcion & imagen'});
     return;
   }
   const aNewExperience = new Experience({
@@ -39,6 +43,7 @@ router.post('/profile/addExperience', (req, res, next) => {
     empresa: empresa,
     ubicacion: ubicacion,
     descripcion: descripcion,
+    imageUrl: imageUrl,
     owner: owner
   });
   User.updateOne({email: req.user.email}, {$push: {experiences: aNewExperience._id}})
@@ -73,6 +78,15 @@ router.post('/profile/experiences/delete', (req, res, next) => {
         .status(400)
         .json({message: 'Deleting experience went wrong'})
     })
-
+    
 })
+
+router.post('/upload', uploader.single('imageUrl'), (req, res, next) => {
+  if(!req.file){
+    next(new Error('No file uploaded!'));
+    return;
+  }
+  res.json({secure_url: req.file.path})
+})
+
 module.exports = router;

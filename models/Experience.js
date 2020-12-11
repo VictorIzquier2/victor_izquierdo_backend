@@ -7,6 +7,7 @@ const experienceSchema = new Schema({
   empresa: {type: String, required: true},
   ubicacion: {type: String, required: true},
   descripcion: {type: String, required: true},
+  imageUrl: {type: String},
   owner: {type: Schema.ObjectId, ref: 'User'}
 });
 
