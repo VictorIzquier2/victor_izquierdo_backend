@@ -111,4 +111,14 @@ authRoutes.get('/loggedin', (req, res, next) => {
   res
     .json({});
 });
+
+authRoutes.get('/isadmin', (req, res, next) => {
+  if(req.body.username === 'victorIronhacker'){
+    res
+      .status(200)
+      .json(req.user)
+  }
+  res
+    .json({});
+})
 module.exports = authRoutes;

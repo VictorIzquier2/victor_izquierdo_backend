@@ -15,9 +15,12 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/profile/experiences', (req, res) => {
-  Experience.find()
-    .then((result) => {
-      res.send(result);
+  User.findById(req.user._id)
+    .then(() => {
+      Experience.find({owner: req.user._id})
+        .then((result) => {
+          res.send(result);
+        })
     })
 });
 
@@ -70,15 +73,20 @@ router.post('/profile/experiences/delete', (req, res, next) => {
   console.log(experienceId);
   Experience.findByIdAndDelete(experienceId)
     .then(() => {
-      res
-        .status(200)
+      User.updateOne({email: req.user.email}, {$pull: { experiences: { $in: [experienceId]} } }, {multi: true})
+        .then(() => {
+          res
+            .status(200)
+        })
+        .catch((err) =>{
+          res
+            .status(400)
+            .json({message: 'Deleting experience went wrong'})
+        })
     })
-    .catch((err) =>{
-      res
-        .status(400)
-        .json({message: 'Deleting experience went wrong'})
+    .catch((err) => {
+      console.log(err);
     })
-    
 })
 
 router.post('/upload', uploader.single('imageUrl'), (req, res, next) => {
