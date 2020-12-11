@@ -58,4 +58,21 @@ router.post('/profile/addExperience', (req, res, next) => {
       })
     })
 })
+
+router.post('/profile/experiences/delete', (req, res, next) => {
+  console.log(req.body);
+  const experienceId = req.body.id;
+  console.log(experienceId);
+  Experience.findByIdAndDelete(experienceId)
+    .then(() => {
+      res
+        .status(200)
+    })
+    .catch((err) =>{
+      res
+        .status(400)
+        .json({message: 'Deleting experience went wrong'})
+    })
+
+})
 module.exports = router;
