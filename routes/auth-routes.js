@@ -112,13 +112,23 @@ authRoutes.get('/loggedin', (req, res, next) => {
     .json({});
 });
 
-authRoutes.get('/isadmin', (req, res, next) => {
-  if(req.body.username === 'victorIronhacker'){
-    res
-      .status(200)
-      .json(req.user)
+checkRoles = (role) => {
+  return function(req, res, next) {
+    if(req.isAuthenticated() && req.user.role === role) {
+      return next()
+    }else{
+      res
+        .json({})
+    }
   }
+}
+
+const checkAdmin = checkRoles('ADMIN');
+
+authRoutes.get('/isadmin', checkAdmin, (req, res) => {
   res
-    .json({});
+    .status(200)
+    .json(req.user)
 })
+
 module.exports = authRoutes;

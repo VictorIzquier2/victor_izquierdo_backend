@@ -62,7 +62,7 @@ router.post('/profile/addExperience', (req, res, next) => {
         }
         res
           .status(200)
-          .json(aNewExperience);
+          .json(aNewExperience)
       })
     })
 })

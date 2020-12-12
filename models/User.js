@@ -6,7 +6,8 @@ const userSchema = new Schema({
   email: {type: String, required: true},
   password: {type: String, required: true, minlength: 8},
   imageUrl: {type: String},
-  experiences: [{type: Schema.ObjectId, ref: 'Experience'}]
+  experiences: [{type: Schema.ObjectId, ref: 'Experience'}],
+  role: {type: String, enum: ['GUEST', 'ADMIN'], default: 'GUEST'}
 });
 
 const User = mongoose.model('User', userSchema);
