@@ -7,7 +7,8 @@ const uploader = require('../configs/cloudinary-setup');
 
 // MODELS
 const User = require('../models/User');
-const Experience = require('../models/Experience')
+const Experience = require('../models/Experience');
+const Education = require('../models/Education');
 
 /* GET home page */
 router.get('/', (req, res, next) => {
@@ -15,12 +16,9 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/profile/experiences', (req, res) => {
-  User.findById(req.user._id)
-    .then(() => {
-      Experience.find({owner: req.user._id})
-        .then((result) => {
-          res.send(result);
-        })
+  Experience.find({})
+    .then((result) => {
+      res.send(result);
     })
 });
 
@@ -68,9 +66,7 @@ router.post('/profile/addExperience', (req, res, next) => {
 })
 
 router.post('/profile/experiences/delete', (req, res, next) => {
-  console.log(req.body);
   const experienceId = req.body.id;
-  console.log(experienceId);
   Experience.findByIdAndDelete(experienceId)
     .then(() => {
       User.updateOne({email: req.user.email}, {$pull: { experiences: { $in: [experienceId]} } }, {multi: true})
@@ -79,9 +75,81 @@ router.post('/profile/experiences/delete', (req, res, next) => {
             .status(200)
         })
         .catch((err) =>{
+          console.log(err);
           res
             .status(400)
             .json({message: 'Deleting experience went wrong'})
+        })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
+
+router.get('/profile/educations', (req, res) => {
+  Education.find({})
+    .then((result) => {
+      res.send(result);
+    })
+})
+
+router.post('/profile/addEducation', (req, res, next) => {
+
+  const centro = req.body.centro;
+  const titulo = req.body.titulo;
+  const disciplina = req.body.disciplina;
+  const ubicacion = req.body.ubicacion;
+  const descripcion = req.body.descripcion;
+  const imageUrl = req.body.imageUrl;
+  const owner = req.user._id;
+
+  if( !centro || !titulo || !disciplina || !ubicacion || !descripcion || !imageUrl) {
+    res
+      .status(400)
+      .json({message: 'Provide centro, titulo, disciplina, ubicacion, descripción & imagen'});
+    return;
+  }
+  const aNewEducation = new Education({
+    centro: centro,
+    titulo: titulo,
+    disciplina: disciplina,
+    ubicacion: ubicacion,
+    descripcion: descripcion,
+    imageUrl: imageUrl,
+    owner: owner
+  });
+  User.updateOne({email: req.user.email}, {$push: {educations: aNewEducation._id}})
+    .then(() => {
+      aNewEducation.save((err) => {
+        if(err) {
+          console.log(err);
+          res
+            .status(400)
+            .json({message: 'Saving user to database went wrong.'}
+            );
+          return;
+        }
+        res
+          .status(200)
+          .json(aNewEducation)
+      })
+    })
+})
+
+router.post('/profile/educations/delete', (req, res, next) => {
+  const educationId = req.body.id;
+  Education.findByIdAndDelete(educationId)
+    .then(() => {
+      User.updateOne({email: req.user.email}, {$pull: {educations: { $in: [educationId]} } }, {multi: true})
+        .then(() => {
+          res
+            .status(200)
+        })
+        .catch((err) => {
+          console.log(err);
+          res
+            .status(400)
+            .json({message: 'Deleting education went wrong'})
         })
     })
     .catch((err) => {
