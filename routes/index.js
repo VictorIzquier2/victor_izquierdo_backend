@@ -65,14 +65,15 @@ router.post('/profile/addExperience', (req, res, next) => {
     })
 })
 
-router.post('/profile/experiences/delete', (req, res, next) => {
-  const experienceId = req.body.id;
+router.get('/profile/experiences/delete/:id', (req, res, next) => {
+  const experienceId = req.params.id;
   Experience.findByIdAndDelete(experienceId)
     .then(() => {
       User.updateOne({email: req.user.email}, {$pull: { experiences: { $in: [experienceId]} } }, {multi: true})
         .then(() => {
           res
             .status(200)
+            .json({})
         })
         .catch((err) =>{
           console.log(err);
@@ -90,6 +91,9 @@ router.get('/profile/educations', (req, res) => {
   Education.find({})
     .then((result) => {
       res.send(result);
+    })
+    .catch((err)=> {
+      console.log(err);
     })
 })
 
@@ -136,14 +140,15 @@ router.post('/profile/addEducation', (req, res, next) => {
     })
 })
 
-router.post('/profile/educations/delete', (req, res, next) => {
-  const educationId = req.body.id;
+router.get('/profile/educations/delete/:id', (req, res, next) => {
+  const educationId = req.params.id;
   Education.findByIdAndDelete(educationId)
     .then(() => {
       User.updateOne({email: req.user.email}, {$pull: {educations: { $in: [educationId]} } }, {multi: true})
         .then(() => {
           res
             .status(200)
+            .json({})
         })
         .catch((err) => {
           console.log(err);

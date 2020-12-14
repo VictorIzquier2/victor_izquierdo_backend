@@ -6,6 +6,7 @@ const bcrypt     = require('bcryptjs');
 
 // MODELS
 const User = require('../models/User');
+const Statistics = require('../models/Statistics');
 
 authRoutes.post('/signup', (req, res, next) => {
   const username = req.body.username;
@@ -82,14 +83,30 @@ authRoutes.post('/signup', (req, res, next) => {
 authRoutes.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, theUser, failureDetails) => {
       if (err) {
-          res.status(500).json({ message: 'Error authenticating user' });
+          res
+            .status(500)
+            .json({ message: 'Error authenticating user' });
           return;
       }
       if (!theUser) {
-          res.status(401).json(failureDetails);
+          res
+            .status(401)
+            .json(failureDetails);
           return;
       }
-      req.login(theUser, err => err ? res.status(500).json({ message: 'Session error' }) : res.status(200).json(theUser))
+      req.login(theUser, (err) => {
+        if(err){
+          res
+            .status(500)
+            .json({ message: 'Session save went bad' })
+            return;
+
+        }else{
+          res
+            .status(200)
+            .json(theUser)
+        } 
+      });
   })(req, res, next)
 });
 
@@ -107,9 +124,11 @@ authRoutes.get('/loggedin', (req, res, next) => {
     res
       .status(200)
       .json(req.user);
+      return;
   }
   res
-    .json({});
+    .status(403)
+    .json({message: 'Unauthorized'});
 });
 
 checkRoles = (role) => {
