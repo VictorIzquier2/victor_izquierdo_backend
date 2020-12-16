@@ -47,7 +47,7 @@ router.post('/profile/addExperience', (req, res, next) => {
     imageUrl: imageUrl,
     owner: owner
   });
-  User.updateOne({email: req.user.email}, {$push: {experiences: aNewExperience.id}})
+  User.updateOne({email: req.user.email}, {$push: {experiences: aNewExperience._id}})
     .then(() => {
       aNewExperience.save((err) => {
         if(err){
