@@ -16,6 +16,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt        = require('bcryptjs');
 const cors          = require('cors');
 const flash         = require('connect-flash');
+const cookieSession = require('cookie-session')
 
 // MODELS
 const User = require('./models/User');
@@ -78,8 +79,25 @@ app.use((req, res, next) => {
   next();
 })
 
+// Middleware de cookieSession
+app.set('trust proxy', 1)
+app.use(cookieSession({
+    name:'session',
+    keys: ['key1', 'key2'],
+    sameSite: 'none',
+    secure: true
+}))
+
 // Middleware de Session
-app.use(session({secret: 'ourPassword', resave: true, saveUninitialized: true }));
+app.use(session({
+  secret: 'ourPassword', 
+  resave: true, 
+  saveUninitialized: true,
+  cookie: {
+    sameSite: 'none',
+    secure: true
+  }
+}));
 
 // Middleware para serializar al usuario
 passport.serializeUser((user, callback) => {
