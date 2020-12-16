@@ -52,7 +52,7 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
 
-
+/*
 // CORS middleware
 app.use((req,res,next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -66,6 +66,7 @@ app.use((req,res,next) => {
 
   next();
 });
+*/
 
 app.use(cors({
   credentials: true,
