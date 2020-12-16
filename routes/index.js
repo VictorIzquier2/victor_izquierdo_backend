@@ -31,6 +31,7 @@ router.post('/profile/addExperience', (req, res, next) => {
   const descripcion = req.body.descripcion;
   const imageUrl = req.body.imageUrl;
   const owner = req.body.id;
+  console.log(owner);
   
   if(!cargo || !empleo || !empresa || !ubicacion || !descripcion || !imageUrl) {
     res
