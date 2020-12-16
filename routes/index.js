@@ -47,7 +47,7 @@ router.post('/profile/addExperience', (req, res, next) => {
     imageUrl: imageUrl,
     owner: owner
   });
-  User.updateOne({email: req.user.email}, {$push: {experiences: aNewExperience._id}})
+  User.updateOne({email: req.body.email}, {$push: {experiences: aNewExperience._id}})
     .then(() => {
       aNewExperience.save((err) => {
         if(err){
@@ -69,7 +69,7 @@ router.get('/profile/experiences/delete/:id', (req, res, next) => {
   const experienceId = req.params.id;
   Experience.findByIdAndDelete(experienceId)
     .then(() => {
-      User.updateOne({email: req.user.email}, {$pull: { experiences: { $in: [experienceId]} } }, {multi: true})
+      User.updateOne({email: req.body.email}, {$pull: { experiences: { $in: [experienceId]} } }, {multi: true})
         .then(() => {
           res
             .status(200)
@@ -105,7 +105,7 @@ router.post('/profile/addEducation', (req, res, next) => {
   const ubicacion = req.body.ubicacion;
   const descripcion = req.body.descripcion;
   const imageUrl = req.body.imageUrl;
-  const owner = req.user._id;
+  const owner = req.body.id;
 
   if( !centro || !titulo || !disciplina || !ubicacion || !descripcion || !imageUrl) {
     res
@@ -122,7 +122,7 @@ router.post('/profile/addEducation', (req, res, next) => {
     imageUrl: imageUrl,
     owner: owner
   });
-  User.updateOne({email: req.user.email}, {$push: {educations: aNewEducation._id}})
+  User.updateOne({email: req.body.email}, {$push: {educations: aNewEducation._id}})
     .then(() => {
       aNewEducation.save((err) => {
         if(err) {
@@ -144,7 +144,7 @@ router.get('/profile/educations/delete/:id', (req, res, next) => {
   const educationId = req.params.id;
   Education.findByIdAndDelete(educationId)
     .then(() => {
-      User.updateOne({email: req.user.email}, {$pull: {educations: { $in: [educationId]} } }, {multi: true})
+      User.updateOne({email: req.body.email}, {$pull: {educations: { $in: [educationId]} } }, {multi: true})
         .then(() => {
           res
             .status(200)
