@@ -30,7 +30,7 @@ router.post('/profile/addExperience', (req, res, next) => {
   const ubicacion = req.body.ubicacion;
   const descripcion = req.body.descripcion;
   const imageUrl = req.body.imageUrl;
-  const owner = req.user._id;
+  const owner = req.body.id;
   
   if(!cargo || !empleo || !empresa || !ubicacion || !descripcion || !imageUrl) {
     res
