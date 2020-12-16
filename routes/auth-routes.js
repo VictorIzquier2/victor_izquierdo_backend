@@ -100,8 +100,9 @@ authRoutes.post('/login', (req, res, next) => {
             .status(500)
             .json({ message: 'Session save went bad' })
             return;
-
+            
         }else{
+          console.log(3);
           res
             .status(200)
             .json(theUser)
