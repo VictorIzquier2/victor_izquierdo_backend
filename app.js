@@ -69,7 +69,7 @@ app.use((req,res,next) => {
 
 app.use(cors({
   credentials: true,
-  origin:["http://localhost:3001"]
+  origin:["http://localhost:3001", "https://victor-izquierdo-site.netlify.app"]
 }));
 
 app.use((req, res, next) => {
