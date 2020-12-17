@@ -15,14 +15,14 @@ authRoutes.post('/signup', (req, res, next) => {
   
   if(!username || !email || !password) {
     res
-      .status(400)
-      .json({message: 'Provide username, email and password'});
+      .status(200)
+      .json({message: 'Introduce un correo, usuario y contraseña'});
     return;
   }
   if(password.length < 8) {
     res
-      .status(400)
-      .json({message: 'Please make your password at least 8 characters long for security purposes.'}
+      .status(200)
+      .json({message: 'Por favor, asegúrate de que la contraseña tenga al menos 8 caracteres.'}
       );
     return;
   }
@@ -37,8 +37,8 @@ authRoutes.post('/signup', (req, res, next) => {
     }
     if(foundUser){
       res
-        .status(400)
-        .json({message: 'Username taken. Choose another one.'}
+        .status(200)
+        .json({message: 'Este usuario ya está cogido. Elige otro.'}
         );
       return;
     }
