@@ -91,7 +91,7 @@ authRoutes.post('/login', (req, res, next) => {
       if (!theUser) {
           res
             .status(401)
-            .json(failureDetails);
+            .json(failureDetails, {message: 'El usuario no existe.'});
           return;
       }
       req.login(theUser, (err) => {
@@ -116,7 +116,7 @@ authRoutes.post('/logout', (req, res, next) => {
   req.logout();
   res
     .status(200)
-    .json({message: 'Log out success!'});
+    .json({message: 'Log out succes!'});
 });
 
 authRoutes.get('/loggedin', (req, res, next) => {
