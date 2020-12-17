@@ -84,22 +84,22 @@ authRoutes.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, theUser, failureDetails) => {
       if (err) {
           res
-            .status(200)
-            .json({ message: 'Usuario o contraseña incorrecta' });
+            .status(500)
+            .json({ message: 'Error authenticating user' });
           return;
       }
       if (!theUser) {
           res
             .status(200)
-            .json({message: 'El usuario no existe.'})
+            .json({message: 'El usuario no existe o la contraseña es incorrecta.'})
             //.json(failureDetails);
           return;
       }
       req.login(theUser, (err) => {
         if(err){
           res
-            .status(200)
-            .json({ message: 'Error al cargar la sesión' })
+            .status(500)
+            .json({ message: 'Session save went bad' })
             return;
             
         }else{
