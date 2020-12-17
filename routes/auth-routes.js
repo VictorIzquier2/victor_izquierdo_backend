@@ -84,8 +84,8 @@ authRoutes.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, theUser, failureDetails) => {
       if (err) {
           res
-            .status(500)
-            .json({ message: 'Error authenticating user' });
+            .status(200)
+            .json({ message: 'Usuario o contraseña incorrecta' });
           return;
       }
       if (!theUser) {
@@ -98,8 +98,8 @@ authRoutes.post('/login', (req, res, next) => {
       req.login(theUser, (err) => {
         if(err){
           res
-            .status(500)
-            .json({ message: 'Session save went bad' })
+            .status(200)
+            .json({ message: 'Error al cargar la sesión' })
             return;
             
         }else{
