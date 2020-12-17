@@ -91,7 +91,8 @@ authRoutes.post('/login', (req, res, next) => {
       if (!theUser) {
           res
             .status(401)
-            .json(failureDetails, {message: 'El usuario no existe.'});
+            .json({message: 'El usuario no existe.'})
+            .json(failureDetails);
           return;
       }
       req.login(theUser, (err) => {
