@@ -90,7 +90,7 @@ authRoutes.post('/login', (req, res, next) => {
       }
       if (!theUser) {
           res
-            .status(401)
+            .status(200)
             .json({message: 'El usuario no existe.'})
             //.json(failureDetails);
           return;
