@@ -114,12 +114,11 @@ authRoutes.post('/login', (req, res, next) => {
 
 authRoutes.post('/logout', (req, res, next) => {
   const loggins = req.body.loggins;
-  console.log(loggins);
   // req.logout() is defined by passport
   req.logout();
   res
     .status(200)
-    .json({message: 'Log out succes!'});
+    .json({message: `Log out succes ${loggins}!`});
 });
 
 authRoutes.get('/loggedin', (req, res, next) => {
