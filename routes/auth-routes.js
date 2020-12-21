@@ -113,6 +113,8 @@ authRoutes.post('/login', (req, res, next) => {
 });
 
 authRoutes.post('/logout', (req, res, next) => {
+  const loggins = req.body.loggins;
+  console.log(loggins);
   // req.logout() is defined by passport
   req.logout();
   res
