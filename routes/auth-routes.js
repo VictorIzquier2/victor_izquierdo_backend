@@ -119,20 +119,22 @@ authRoutes.post('/logout', (req, res, next) => {
     fecha: Date.now(),
     loggins: loggins
   })
-  aNewStatistic.save((err) => {
-    if(err){
+  if(loggins > 0){
+    aNewStatistic.save((err) => {
+      if(err){
+        res
+        .status(400)
+        .json({message: 'saving statistic to database went wrong.'}
+        );
+        return;
+      }
+      // req.logout() is defined by passport
+      req.logout();
       res
-      .status(400)
-      .json({message: 'saving statistic to database went wrong.'}
-      );
-      return;
-    }
-    // req.logout() is defined by passport
-    req.logout();
-    res
-      .status(200)
-      .json({message: `Log out succes ${loggins}!`});
-  })
+        .status(200)
+        .json({message: `Log out succes ${loggins}!`});
+    })
+  }
 });
 
 authRoutes.get('/loggedin', (req, res, next) => {
