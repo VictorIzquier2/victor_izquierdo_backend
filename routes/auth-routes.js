@@ -113,40 +113,26 @@ authRoutes.post('/login', (req, res, next) => {
 });
 
 authRoutes.post('/logout', (req, res, next) => {
-  const loggins = (statistic) => statistic.loggins + 1;
-  // req.logout() is defined by passport
-  req.logout();
-  if(loggins > 0){
-    Statistics.findOne({fecha: Date.now()}, (err, foundDate) => {
-      if(err){
-        res
-          .status(500)
-          .json({message: 'Statistics check went bad.'}
-          );
-        return;
-      }
-      if(foundDate){
-        Statistics.updateOne({fecha: Date.now}, {loggins: loggins(this)});
-      }else{
-        const aNewStatistic = new Statistics({
-          fecha: Date.now(),
-          loggins: 1
-        });
-        aNewStatistic.save((err) => {
-          if(err){
-            res
-              .status(400)
-              .json({message: 'Saving statistic to database went wrong.'}
-              );
-            return;
-          }
-          res
-            .status(200)
-            .json({message: `Log out succes ${loggins}!`});
-        })
-      }
-    })
-  }
+  const loggins = req.body.loggins;
+
+  const aNewStatistic = new Statistics({
+    fecha: Date.now(),
+    loggins: loggins
+  })
+  aNewStatistic.save((err) => {
+    if(err){
+      res
+      .status(400)
+      .json({message: 'saving statistic to database went wrong.'}
+      );
+      return;
+    }
+    // req.logout() is defined by passport
+    req.logout();
+    res
+      .status(200)
+      .json({message: `Log out succes ${loggins}!`});
+  })
 });
 
 authRoutes.get('/loggedin', (req, res, next) => {
