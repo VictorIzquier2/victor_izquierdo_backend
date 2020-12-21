@@ -120,7 +120,45 @@ authRoutes.post('/logout', (req, res, next) => {
     .json({message: 'Log out succes!'});
 });
 
-authRoutes.get('/loggedin', (req, res, next) => {
+authRoutes.get('/uploggins', (req, res, next) => {
+  const loggins = req.body.loggins;
+  if(!loggins){
+    res
+      .status(200)
+      .json({message: 'No se ha podido contabilizar el login'});
+    return;
+  }
+  Statistics.findOne({fecha: Date.now()}, (err, foundDate) => {
+    if(err){
+      res
+        .status(500)
+        .json({message: 'Statistics check went bad.'}
+        );
+      return;
+    }
+    if(foundDate){
+      Statistics.updateOne({fecha: Date.now()}, {loggins: loggins})
+    }else{
+      const aNewStatistic = new Statistics({
+        fecha: Date.now(),
+        loggins: loggins
+      })
+      aNewStatistic.save((err) => {
+        if(err){
+          res
+            .status(400)
+            .json({message: 'Saving Statistic to database went wrong.'}
+            );
+          return;
+        }
+      })
+
+    }
+  })
+  
+})
+
+authRoutes.post('/loggedin', (req, res, next) => {
   // req.isAuthenticated() is defined by passport
   if(req.isAuthenticated()){
     res
