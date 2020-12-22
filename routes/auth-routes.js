@@ -128,13 +128,13 @@ authRoutes.post('/logout', (req, res, next) => {
         );
         return;
       }
-      // req.logout() is defined by passport
-      req.logout();
-      res
-        .status(200)
-        .json({message: `Log out succes ${loggins}!`});
     })
   }
+  // req.logout() is defined by passport
+  req.logout();
+  res
+    .status(200)
+    .json({message: `Log out succes ${loggins}!`});
 });
 
 authRoutes.get('/loggedin', (req, res, next) => {
