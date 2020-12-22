@@ -7,6 +7,8 @@ const userSchema = new Schema({
   password: {type: String, required: true, minlength: 8},
   imageUrl: {type: String},
   experiences: [{type: Schema.ObjectId, ref: 'Experience'}],
+  educations: [{type: Schema.ObjectId, ref: 'Education'}],
+  projects: [{type: Schema.ObjectId, ref: 'Project'}],
   role: {type: String, enum: ['GUEST', 'ADMIN'], default: 'GUEST'}
 });
 

@@ -9,6 +9,7 @@ const uploader = require('../configs/cloudinary-setup');
 const User = require('../models/User');
 const Experience = require('../models/Experience');
 const Education = require('../models/Education');
+const Project = require('../models/Project');
 
 /* GET home page */
 router.get('/', (req, res, next) => {
@@ -31,7 +32,7 @@ router.post('/profile/addExperience', (req, res, next) => {
   const descripcion = req.body.descripcion;
   const imageUrl = req.body.imageUrl;
   const owner = req.body.id;
-  console.log(owner);
+  //console.log(owner);
   
   if(!cargo || !empleo || !empresa || !ubicacion || !descripcion || !imageUrl) {
     res
@@ -156,6 +157,75 @@ router.get('/profile/educations/delete/:id', (req, res, next) => {
           res
             .status(400)
             .json({message: 'Deleting education went wrong'})
+        })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
+
+router.get('/gallery/projects', (req, res) => {
+  Project.find({})
+    .then((result) => {
+      res.send(result);
+    })
+});
+
+router.post('/gallery/addProject', (req, res, next) => {
+  const titulo = req.body.titulo;
+  const tecnologia = req.body.tecnologia;
+  const descripcion = req.body.descripcion;
+  const imageUrl = req.body.imageUrl;
+  const owner = req.body.id;
+
+  if(!titulo ||!tecnologia || !descripcion || !imageUrl){
+    res
+      .status(400)
+      .json({message: 'Provide titulo, tecnologia, descripcion & imagen'}
+      );
+    return;
+  }
+  const aNewProject = new Project({
+    titulo: titulo,
+    tecnologia: tecnologia,
+    descripcion: descripcion,
+    imageUrl: imageUrl,
+    owner: owner
+  });
+  User.updateOne({email: req.body.email}, {$push: {projects: aNewProject._id}
+  })
+    .then(() => {
+      aNewProject.save((err) => {
+        if(err){
+          console.log(err);
+          res
+            .status(400)
+            .json({message: 'Saving user to database went wrong.'}
+            );
+          return;
+        }
+        res
+          .status(200)
+          .json(aNewProject)
+      })
+    })
+})
+
+router.get('/gallery/projects/delete/:id', (req, res, next) => {
+  const projectId = req.params.id;
+  Project.findByIdAndDelete(projectId)
+    .then(() => {
+      User.updateOne({email: req.body.email}, {$pull: {projects: {$in: [projectId]} } }, {multi: true})
+        .then(() => {
+          res
+            .status(200)
+            .json({})
+        })
+        .catch((err) => {
+          console.log(err);
+          res
+            .status(400)
+            .json({message: 'Deleting Project went wrong'})
         })
     })
     .catch((err) => {
