@@ -172,6 +172,7 @@ router.get('/gallery/projects', (req, res) => {
 });
 
 router.post('/gallery/addProject', (req, res, next) => {
+  
   const titulo = req.body.titulo;
   const tecnologia = req.body.tecnologia;
   const descripcion = req.body.descripcion;
