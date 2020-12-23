@@ -137,7 +137,7 @@ passport.use(
 passport.use(
   new SlackStrategy(
     {
-      clientID: '1400992106598.1608255544897',
+      clientID: 1400992106598.1608255544897,
       clientSecret: '900723c9daa9e3a20798f646e5514962',
       callbackURL: '/auth/slack/callback'
     },
