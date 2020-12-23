@@ -72,7 +72,7 @@ app.use((req,res,next) => {
 
 app.use(cors({
   credentials: true,
-  origin:["http://localhost:3001", "https://victor-izquierdo-site.netlify.app", "https://ironhackremotewebft.slack.com/oauth?client_id=1400992106598.1608255544897&scope=identity.basic+identity.email+identity.avatar+identity.team&user_scope=&redirect_uri=https%3A%2F%2Fvictor-izquierdo-site.herokuapp.com%2Fauth%2Fslack%2Fcallback&state=&granular_bot_scope=0&single_channel=0&install_redirect=&tracked=1&response_type=code&team=y"]
+  origin:["http://localhost:3001", "https://victor-izquierdo-site.netlify.app", "https://slack.com/oauth/authorize"]
 }));
 
 app.use((req, res, next) => {
