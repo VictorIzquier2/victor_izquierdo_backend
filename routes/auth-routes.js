@@ -8,14 +8,14 @@ const bcrypt     = require('bcryptjs');
 const User = require('../models/User');
 const Statistics = require('../models/Statistics');
 
-authRoutes.get('/auth/slack', passport.authenticate('slack'));
-
-authRoutes.get('/auth/slack/callback', 
-  passport.authenticate('slack', {
-    successRedirect: '/private-page',
-    failureRedirect: '/signup'
-  }
-));
+authRoutes.get("/auth/slack", passport.authenticate("slack"));
+authRoutes.get(
+  "/auth/slack/callback",
+  passport.authenticate("slack", {
+    successRedirect: "/",
+    failureRedirect: "/signup" // here you would navigate to the classic login page
+  })
+);
 
 authRoutes.post('/signup', (req, res, next) => {
   const username = req.body.username;
