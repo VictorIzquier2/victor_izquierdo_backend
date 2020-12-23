@@ -12,8 +12,8 @@ authRoutes.get("/auth/slack", passport.authenticate("slack"));
 authRoutes.get(
   "/auth/slack/callback",
   passport.authenticate("slack", {
-    successRedirect: "/",
-    failureRedirect: "/signup" // here you would navigate to the classic login page
+    successRedirect: "/private-page",
+    failureRedirect: "/" // here you would navigate to the classic login page
   })
 );
 
