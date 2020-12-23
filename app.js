@@ -16,8 +16,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt        = require('bcryptjs');
 const cors          = require('cors');
 const flash         = require('connect-flash');
-const cookieSession = require('cookie-session');
-const SlackStrategy = require('passport-slack').Strategy;
+const cookieSession = require('cookie-session')
 
 // MODELS
 const User = require('./models/User');
@@ -72,7 +71,7 @@ app.use((req,res,next) => {
 
 app.use(cors({
   credentials: true,
-  origin:["http://localhost:3001", "https://victor-izquierdo-site.netlify.app", "https://slack.com/oauth/authorize"]
+  origin:["http://localhost:3001", "https://victor-izquierdo-site.netlify.app"]
 }));
 
 app.use((req, res, next) => {
@@ -132,34 +131,7 @@ passport.use(
     .catch((err) => next(err));
   })
 );
-
-// Middleware de Slack
-passport.use(
-  new SlackStrategy(
-    {
-      clientID: '1400992106598.1608255544897',
-      clientSecret: '900723c9daa9e3a20798f646e5514962',
-      callbackURL: '/auth/slack/callback'
-    },
-    (accessToken, refreshToken, profile, done) => {
-      console.log('Slack account details:', profile);
-      User.findOne({slackID: profile.id})
-        then(user => {
-          if(user) {
-            done(null, user);
-            return;
-          }
-          User.create({slackID: profile.id})
-            .then(newUser => {
-              done(null, newUser);
-            })
-            .catch(err => done(err));
-        })
-        .catch(err => done(err));
-    }
-  )
-);
-
+  
 // Middleware de passport
 app.use(passport.initialize());
 app.use(passport.session());
