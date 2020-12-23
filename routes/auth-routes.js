@@ -8,6 +8,15 @@ const bcrypt     = require('bcryptjs');
 const User = require('../models/User');
 const Statistics = require('../models/Statistics');
 
+authRoutes.get('/auth/slack', passport.authenticate('slack'));
+
+authRoutes.get('/auth/slack/callback', 
+  passport.authenticate('slack', {
+    successRedirect: '/private-page',
+    failureRedirect: '/signup'
+  }
+));
+
 authRoutes.post('/signup', (req, res, next) => {
   const username = req.body.username;
   const email = req.body.email;

@@ -9,7 +9,9 @@ const userSchema = new Schema({
   experiences: [{type: Schema.ObjectId, ref: 'Experience'}],
   educations: [{type: Schema.ObjectId, ref: 'Education'}],
   projects: [{type: Schema.ObjectId, ref: 'Project'}],
-  role: {type: String, enum: ['GUEST', 'ADMIN'], default: 'GUEST'}
+  role: {type: String, enum: ['GUEST', 'ADMIN'], default: 'GUEST'},
+  slackID: {type: String},
+  googleID: {type: String}
 });
 
 const User = mongoose.model('User', userSchema);
